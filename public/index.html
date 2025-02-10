@@ -4,15 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Job Pricing Calculator</title>
-    <!-- Link to local styles -->
     <link rel="stylesheet" href="styles.css" />
-    <!-- Main script -->
     <script defer src="script.js"></script>
   </head>
   <body>
     <header>
       <div class="logo-container">
-        <!-- Logos (ensure these images exist in public/assets/) -->
+        <!-- Ensure these images are in public/assets/ -->
         <img src="assets/officeworks-logo.png" alt="Officeworks Logo" class="logo" />
         <img src="assets/geeks2u-logo.png" alt="Geeks2U Logo" class="logo" />
       </div>
@@ -25,13 +23,13 @@
         <div class="email-section">
           <label for="email">Enter Email to Pre-fill:</label>
           <input type="email" id="email" placeholder="Enter your email" />
-          <button id="load-quote" onclick="fetchQuote()">Load Quote</button>
+          <button id="load-quote-btn" onclick="fetchQuote()">Load Quote</button>
         </div>
 
         <!-- Product Selection -->
         <h2>Select Products</h2>
         <div id="product-list">
-          <!-- Dynamic product list will be injected here -->
+          <!-- Products will be dynamically injected here -->
         </div>
 
         <!-- Service Add-On Selection -->
@@ -70,12 +68,18 @@
             <label for="complexity">Installation Complexity (Multiplier):</label>
             <input type="number" id="complexity" step="0.1" min="1" value="1" />
           </div>
+          <!-- Calendar & Scheduling -->
+          <div class="custom-item">
+            <label for="schedule-date">Preferred Installation Date:</label>
+            <input type="date" id="schedule-date" />
+          </div>
         </div>
 
         <!-- Action Buttons -->
         <div class="buttons">
           <button onclick="generateQuote()">Generate Quote</button>
           <button onclick="printQuote()">Print as PDF</button>
+          <button onclick="exportCSV()">Export CSV</button>
           <button onclick="scheduleJob()">Schedule Job</button>
           <button onclick="sendEmail()">Email Quote</button>
         </div>
@@ -86,6 +90,16 @@
         <p id="total-price"></p>
       </section>
     </main>
+
+    <!-- Floating Chatbot Widget -->
+    <div id="chatbot" class="chatbot-closed">
+      <div id="chatbot-header" onclick="toggleChatbot()">Need Help? Chat with us!</div>
+      <div id="chatbot-body">
+        <div id="chatbot-messages"></div>
+        <input type="text" id="chatbot-input" placeholder="Type your question..." />
+        <button onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>
 
     <footer>
       <p>&copy; 2025 Officeworks &amp; Geeks2U</p>
