@@ -78,7 +78,7 @@ main {
   border-radius: 4px;
 }
 
-/* Service Add-Ons & Customization */
+/* Add-Ons & Customization */
 #addons, #customization {
   margin-bottom: 20px;
   padding: 10px;
@@ -136,4 +136,47 @@ footer {
   position: relative;
   bottom: 0;
   width: 100%;
+}
+
+/* Chatbot Widget */
+#chatbot {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #0073e6;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+#chatbot.chatbot-closed {
+  transform: translateY(260px);
+}
+#chatbot-header {
+  background: #0073e6;
+  color: #fff;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+}
+#chatbot-body {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+#chatbot-messages {
+  flex: 1;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+#chatbot-input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
 }
