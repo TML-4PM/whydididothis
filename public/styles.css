@@ -6,7 +6,7 @@ body {
   padding: 0;
 }
 
-/* Header */
+/* Header Styles */
 header {
   background-color: #0073e6;
   color: #fff;
@@ -78,7 +78,7 @@ main {
   border-radius: 4px;
 }
 
-/* Add-Ons & Customization */
+/* Service Add-Ons & Customization */
 #addons, #customization {
   margin-bottom: 20px;
   padding: 10px;
