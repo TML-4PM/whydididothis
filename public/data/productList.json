@@ -9,13 +9,6 @@
       ]
     },
     {
-      "category": "Desktops",
-      "items": [
-        { "sku": "DESK-001", "name": "HP Pavilion Desktop", "price": 699.99 },
-        { "sku": "DESK-002", "name": "Acer Aspire TC", "price": 549.99 }
-      ]
-    },
-    {
       "category": "Monitors",
       "items": [
         { "sku": "MON-001", "name": "HP 24\" FHD Monitor", "price": 249.99 },
@@ -28,63 +21,6 @@
       "items": [
         { "sku": "KM-001", "name": "Logitech Wireless Keyboard", "price": 59.99 },
         { "sku": "KM-002", "name": "Logitech Wireless Mouse", "price": 39.99 }
-      ]
-    },
-    {
-      "category": "Docking Stations",
-      "items": [
-        { "sku": "DOC-001", "name": "Dell WD19 Dock", "price": 199.99 },
-        { "sku": "DOC-002", "name": "HP Thunderbolt Dock", "price": 249.99 }
-      ]
-    },
-    {
-      "category": "Printers & Scanners",
-      "items": [
-        { "sku": "PRT-001", "name": "HP LaserJet Pro MFP", "price": 299.99 },
-        { "sku": "SCN-001", "name": "Canon PIXMA TS5360", "price": 149.99 }
-      ]
-    },
-    {
-      "category": "POS Systems",
-      "items": [
-        { "sku": "POS-001", "name": "Square POS Terminal", "price": 299.99 },
-        { "sku": "POS-002", "name": "Clover Station", "price": 399.99 }
-      ]
-    },
-    {
-      "category": "Tablets & Mobile Devices",
-      "items": [
-        { "sku": "TAB-001", "name": "Apple iPad Air", "price": 599.99 },
-        { "sku": "TAB-002", "name": "Samsung Galaxy Tab S7", "price": 649.99 }
-      ]
-    },
-    {
-      "category": "VR/XR Headsets",
-      "items": [
-        { "sku": "VR-001", "name": "Oculus Quest 2", "price": 299.99 },
-        { "sku": "VR-002", "name": "HTC Vive Pro", "price": 599.99 }
-      ]
-    },
-    {
-      "category": "Barcode Scanners",
-      "items": [
-        { "sku": "BRS-001", "name": "Zebra DS2208", "price": 199.99 },
-        { "sku": "BRS-002", "name": "Honeywell Voyager", "price": 149.99 }
-      ]
-    },
-    {
-      "category": "Thin Clients & Virtual Desktops",
-      "items": [
-        { "sku": "TC-001", "name": "HP t430 Thin Client", "price": 299.99 },
-        { "sku": "TC-002", "name": "Dell Wyse 5070", "price": 349.99 }
-      ]
-    },
-    {
-      "category": "Peripheral Accessories",
-      "items": [
-        { "sku": "ACC-001", "name": "Monitor Arm", "price": 99.99 },
-        { "sku": "ACC-002", "name": "HDMI Cable", "price": 19.99 },
-        { "sku": "ACC-003", "name": "USB Adapter", "price": 29.99 }
       ]
     }
   ]
