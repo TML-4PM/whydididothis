@@ -1,30 +1,40 @@
+// script.js
 document.addEventListener("DOMContentLoaded", () => {
   loadProducts();
   initChatbot();
 });
 
-// Load products from the JSON file and inject into the product list section
+/* ===================== Product Loading ===================== */
+/**
+ * Fetch product data from data/productList.json and dynamically create product elements.
+ */
 async function loadProducts() {
   try {
+    // Fetch the product list from the data folder
     const response = await fetch("data/productList.json");
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    if (!response.ok) {
+      throw new Error(`Failed to load product data: ${response.status}`);
+    }
     const data = await response.json();
-    console.log("Loaded product data:", data);
+    console.log("Product data loaded:", data);
+    
     const productListDiv = document.getElementById("product-list");
     productListDiv.innerHTML = "";
 
-    if (!data.categories || data.categories.length === 0) {
+    // Check that data.categories exists and is an array
+    if (!data.categories || !Array.isArray(data.categories) || data.categories.length === 0) {
       productListDiv.innerHTML = "<p>No products available.</p>";
       return;
     }
-
-    data.categories.forEach((category) => {
+    
+    // Create product elements for each category and item
+    data.categories.forEach(category => {
       const categoryDiv = document.createElement("div");
       categoryDiv.classList.add("category");
       categoryDiv.innerHTML = `<h3>${category.category}</h3>`;
-
-      if (category.items && category.items.length > 0) {
-        category.items.forEach((product) => {
+      
+      if (category.items && Array.isArray(category.items)) {
+        category.items.forEach(product => {
           const productDiv = document.createElement("div");
           productDiv.classList.add("product-item");
 
@@ -34,12 +44,12 @@ async function loadProducts() {
           checkbox.id = product.sku;
           checkbox.value = product.sku;
 
-          // Label with product name and price
+          // Label displaying product name and price
           const label = document.createElement("label");
           label.setAttribute("for", product.sku);
           label.textContent = `${product.name} - $${parseFloat(product.price).toFixed(2)}`;
 
-          // Quantity input
+          // Quantity input for product (default: 1)
           const qtyInput = document.createElement("input");
           qtyInput.type = "number";
           qtyInput.id = `qty-${product.sku}`;
@@ -63,46 +73,53 @@ async function loadProducts() {
   }
 }
 
-// Generate quote by calculating product costs, add-ons, and customization inputs
+/* ===================== Quote Calculation ===================== */
+/**
+ * Calculate the final quote based on selected products, service add-ons, and customization options.
+ */
 function generateQuote() {
   let selectedProducts = [];
   let productTotal = 0;
 
-  document.querySelectorAll("#product-list input[type='checkbox']:checked").forEach((checkbox) => {
+  // Process each checked product
+  const checkboxes = document.querySelectorAll("#product-list input[type='checkbox']:checked");
+  checkboxes.forEach(checkbox => {
     const sku = checkbox.value;
-    const quantity = parseInt(document.getElementById(`qty-${sku}`).value) || 1;
+    const quantity = parseInt(document.getElementById(`qty-${sku}`).value, 10) || 1;
     const labelText = document.querySelector(`label[for='${sku}']`).textContent;
-    // Expect label format "Product Name - $price"
-    const [name, priceText] = labelText.split(" - $");
-    const price = parseFloat(priceText);
+    // Expected format: "Product Name - $price"
+    const [name, priceStr] = labelText.split(" - $");
+    const price = parseFloat(priceStr);
     const cost = price * quantity;
     selectedProducts.push({ name, quantity, cost });
     productTotal += cost;
   });
 
-  // Add-on cost from service add-ons
+  // Calculate service add-on cost
   let addonTotal = 0;
-  ["addon-install", "addon-config", "addon-network"].forEach((id) => {
+  const addonIds = ["addon-install", "addon-config", "addon-network"];
+  addonIds.forEach(id => {
     const addonElem = document.getElementById(id);
     if (addonElem && addonElem.checked) {
       addonTotal += parseFloat(addonElem.value);
     }
   });
 
-  // Customization options
-  const numDevices = parseInt(document.getElementById("num-devices").value) || 1;
+  // Customization values
+  const numDevices = parseInt(document.getElementById("num-devices").value, 10) || 1;
   const techHours = parseFloat(document.getElementById("tech-hours").value) || 0;
   const travelCost = parseFloat(document.getElementById("travel-cost").value) || 0;
   const complexity = parseFloat(document.getElementById("complexity").value) || 1;
   const scheduleDate = document.getElementById("schedule-date").value || "Not set";
-  const technicianCost = techHours * 50; // $50/hour assumed
+  const technicianCost = techHours * 50; // Assume $50 per technician hour
 
-  // Final cost calculation
+  // Final cost calculation:
+  // Multiply the product cost by the number of devices and complexity, then add add-on, technician, and travel costs.
   const finalCost = productTotal * numDevices * complexity + addonTotal + technicianCost + travelCost;
 
-  // Build quote summary
+  // Build a detailed quote summary
   let summaryLines = selectedProducts.map(
-    (p) => `${p.name} x${p.quantity} - $${p.cost.toFixed(2)}`
+    p => `${p.name} x${p.quantity} - $${p.cost.toFixed(2)}`
   );
   if (addonTotal > 0) summaryLines.push(`Service Add-Ons - $${addonTotal.toFixed(2)}`);
   if (technicianCost > 0) summaryLines.push(`Technician Cost - $${technicianCost.toFixed(2)}`);
@@ -112,22 +129,21 @@ function generateQuote() {
   summaryLines.push(`Preferred Date: ${scheduleDate}`);
   summaryLines.push(`Final Cost: $${finalCost.toFixed(2)}`);
 
+  // Update the DOM with the quote summary and total
   document.getElementById("quote-summary").innerHTML = summaryLines.join("<br>");
   document.getElementById("total-price").textContent = `Total: $${finalCost.toFixed(2)}`;
 }
 
-// Print-to-PDF (placeholder using window.print)
-function printQuote() {
-  window.print();
-}
-
-// Export the quote as CSV
+/* ===================== CSV Export Functionality ===================== */
+/**
+ * Export the current quote as a CSV file.
+ */
 function exportCSV() {
   const summaryText = document.getElementById("quote-summary").innerText;
-  const totalText = document.getElementById("total-price").textContent;
-  const csvData = `Quote Summary\n${summaryText}\n${totalText}`;
-  const csvBlob = new Blob([csvData], { type: "text/csv" });
-  const csvUrl = URL.createObjectURL(csvBlob);
+  const totalText = document.getElementById("total-price").innerText;
+  const csvContent = `Quote Summary\n${summaryText}\n${totalText}`;
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const csvUrl = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = csvUrl;
   link.download = "quote_summary.csv";
@@ -136,7 +152,17 @@ function exportCSV() {
   document.body.removeChild(link);
 }
 
-// Simulate sending an email with PDF attachment (placeholder)
+/* ===================== Print and Email Placeholders ===================== */
+/**
+ * Trigger print (simulate print-to-PDF).
+ */
+function printQuote() {
+  window.print();
+}
+
+/**
+ * Simulate sending an email with the quote.
+ */
 function sendEmail() {
   const email = document.getElementById("email").value;
   if (!email) {
@@ -144,12 +170,14 @@ function sendEmail() {
     return;
   }
   const quoteSummary = document.getElementById("quote-summary").innerText;
-  const totalPrice = document.getElementById("total-price").textContent;
-  // In production, integrate with an email API that sends a PDF attachment
-  alert(`Email sent to troy.latter@unisys.com with:\n${quoteSummary}\n${totalPrice}\nCustomer Email: ${email}`);
+  const totalPrice = document.getElementById("total-price").innerText;
+  // Placeholder: In production, integrate with an email/PDF service.
+  alert(`Email sent to troy.latter@unisys.com with the following details:\n${quoteSummary}\n${totalPrice}\nCustomer Email: ${email}`);
 }
 
-// Placeholder for fetching a stored quote by email
+/**
+ * Simulate fetching a stored quote.
+ */
 function fetchQuote() {
   const email = document.getElementById("email").value;
   if (email) {
@@ -159,7 +187,9 @@ function fetchQuote() {
   }
 }
 
-// Placeholder for scheduling a job
+/**
+ * Simulate job scheduling.
+ */
 function scheduleJob() {
   const scheduleDate = document.getElementById("schedule-date").value;
   if (scheduleDate) {
@@ -169,7 +199,7 @@ function scheduleJob() {
   }
 }
 
-/* Chatbot functionality */
+/* ===================== Chatbot Functionality ===================== */
 function initChatbot() {
   const chatbot = document.getElementById("chatbot");
   chatbot.classList.add("chatbot-closed");
@@ -192,17 +222,17 @@ function sendChatMessage() {
 }
 
 function appendChatMessage(sender, message) {
-  const chatMessages = document.getElementById("chatbot-messages");
+  const messagesDiv = document.getElementById("chatbot-messages");
   const messageDiv = document.createElement("div");
   messageDiv.classList.add("chat-message");
   messageDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
-  chatMessages.appendChild(messageDiv);
-  chatMessages.scrollTop = chatMessages.scrollHeight;
+  messagesDiv.appendChild(messageDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
 }
 
 function getChatbotResponse(input) {
   input = input.toLowerCase();
   if (input.includes("product")) return "We offer a range of laptops, monitors, and peripherals.";
-  if (input.includes("price")) return "Our pricing adjusts based on quantity, add-ons, and installation complexity.";
+  if (input.includes("price")) return "Our pricing is dynamic and based on several factors including quantity and add-ons.";
   return "I'm here to help! Could you please provide more details?";
 }
