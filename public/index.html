@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Job Pricing Calculator</title>
+    <!-- Link to local styles -->
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Main script -->
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="logo-container">
+        <!-- Logos (ensure these images exist in public/assets/) -->
+        <img src="assets/officeworks-logo.png" alt="Officeworks Logo" class="logo" />
+        <img src="assets/geeks2u-logo.png" alt="Geeks2U Logo" class="logo" />
+      </div>
+      <h1>Job Pricing Calculator</h1>
+    </header>
+
+    <main>
+      <section id="quote-form">
+        <!-- Email Section -->
+        <div class="email-section">
+          <label for="email">Enter Email to Pre-fill:</label>
+          <input type="email" id="email" placeholder="Enter your email" />
+          <button id="load-quote" onclick="fetchQuote()">Load Quote</button>
+        </div>
+
+        <!-- Product Selection -->
+        <h2>Select Products</h2>
+        <div id="product-list">
+          <!-- Dynamic product list will be injected here -->
+        </div>
+
+        <!-- Service Add-On Selection -->
+        <h2>Service Add-Ons</h2>
+        <div id="addons">
+          <div class="addon-item">
+            <input type="checkbox" id="addon-install" value="100" />
+            <label for="addon-install">Installation Service (+$100)</label>
+          </div>
+          <div class="addon-item">
+            <input type="checkbox" id="addon-config" value="75" />
+            <label for="addon-config">Configuration Service (+$75)</label>
+          </div>
+          <div class="addon-item">
+            <input type="checkbox" id="addon-network" value="150" />
+            <label for="addon-network">Extra Networking Setup (+$150)</label>
+          </div>
+        </div>
+
+        <!-- Customization Options -->
+        <h2>Customization Options</h2>
+        <div id="customization">
+          <div class="custom-item">
+            <label for="num-devices">Number of Devices:</label>
+            <input type="number" id="num-devices" min="1" value="1" />
+          </div>
+          <div class="custom-item">
+            <label for="tech-hours">Technician Hours Required:</label>
+            <input type="number" id="tech-hours" min="0" value="0" />
+          </div>
+          <div class="custom-item">
+            <label for="travel-cost">Travel Costs (if onsite):</label>
+            <input type="number" id="travel-cost" min="0" value="0" />
+          </div>
+          <div class="custom-item">
+            <label for="complexity">Installation Complexity (Multiplier):</label>
+            <input type="number" id="complexity" step="0.1" min="1" value="1" />
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="buttons">
+          <button onclick="generateQuote()">Generate Quote</button>
+          <button onclick="printQuote()">Print as PDF</button>
+          <button onclick="scheduleJob()">Schedule Job</button>
+          <button onclick="sendEmail()">Email Quote</button>
+        </div>
+
+        <!-- Quote Summary -->
+        <h2>Quote Summary</h2>
+        <div id="quote-summary"></div>
+        <p id="total-price"></p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Officeworks &amp; Geeks2U</p>
+    </footer>
+  </body>
+</html>
